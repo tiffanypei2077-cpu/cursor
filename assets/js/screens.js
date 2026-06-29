@@ -120,14 +120,39 @@ function lumiHead(size = 56) {
   return `<div class="assistant-avatar" style="width:${size}px;height:${size}px">${lumiSVG("happy")}</div>`;
 }
 function tabbar(active, d) {
-  return `<div class="tabbar">
-    <div class="tabbar__item ${active === "learn" ? "on" : ""}" data-go="home"><span class="ic">🏠</span>${d.tabs.learn}</div>
+  // AI/LUMI is the first, always-accented tab so the assistant stays prominent
+  return `<div class="tabbar tabbar--4">
+    <div class="tabbar__item tabbar__item--ai ${active === "ai" ? "on" : ""}" data-go="assistant">
+      <span class="tabbar__lumi">${lumiSVG("happy")}</span>${d.tabs.ai}</div>
+    <div class="tabbar__item ${active === "home" ? "on" : ""}" data-go="home"><span class="ic">🏠</span>${d.tabs.learn}</div>
     <div class="tabbar__item ${active === "scn" ? "on" : ""}" data-go="library"><span class="ic">🧭</span>${d.tabs.scn}</div>
-    <div class="tabbar__center" data-go="assistant">${lumiSVG("happy")}</div>
-    <div class="tabbar__item" data-go="home"><span class="ic">🔁</span>${d.tabs.review}</div>
     <div class="tabbar__item ${active === "me" ? "on" : ""}" data-go="profile"><span class="ic">👤</span>${d.tabs.me}</div>
   </div>`;
 }
+/* always-on-call floating LUMI button */
+function lumiFab(d) {
+  return `<button class="lumi-fab" data-go="assistant" aria-label="${d.fab}">
+    <span class="lumi-fab__ring"></span>
+    <span class="lumi-fab__char">${lumiSVG("happy")}</span>
+    <span class="lumi-fab__tag">${d.fab}</span>
+  </button>`;
+}
+
+/* ---- quick-start tiles + popular cards for the home ---- */
+const QUICK = [
+  { k: "trip", e: "🧳", t: { en: "Business trip", zh: "来中国出差" } },
+  { k: "interview", e: "💼", t: { en: "Interview", zh: "模拟面试" } },
+  { k: "expo", e: "📊", t: { en: "Exhibition", zh: "展会介绍" } },
+  { k: "standup", e: "🗣️", t: { en: "Report", zh: "周会汇报" } },
+];
+const POPULAR = [
+  { k: "interview", e: "💼", g: 1, cn: "面试自我介绍", t: { en: "Interview self-intro", zh: "面试自我介绍" }, learners: "36,364" },
+  { k: "standup", e: "📈", g: 2, cn: "专业术语速成", t: { en: "Industry jargon", zh: "专业术语速成" }, learners: "28,940" },
+  { k: "expo", e: "🤝", g: 3, cn: "展会接待客户", t: { en: "Hosting clients at expo", zh: "展会接待客户" }, learners: "19,205" },
+  { k: "quote", e: "💰", g: 4, cn: "商务报价谈判", t: { en: "Quote & negotiate", zh: "商务报价谈判" }, learners: "24,118" },
+  { k: "toast", e: "🍷", g: 5, cn: "餐桌敬酒", t: { en: "Toast at a dinner", zh: "餐桌敬酒" }, learners: "15,402" },
+  { k: "wechat", e: "📱", g: 6, cn: "微信商务沟通", t: { en: "WeChat for work", zh: "微信商务沟通" }, learners: "31,277" },
+];
 
 /* ============================================================
    1 · WELCOME — LUMI greets + self-intro (pre-language, English)
@@ -385,60 +410,59 @@ function scrSummary(s) {
 }
 
 /* ============================================================
-   8 · HOME — traditional home + LUMI summon bar on top
+   8 · HOME — traditional home; AI (LUMI) made prominent:
+        big summon hero on top + always-on-call floating button.
    ============================================================ */
 function scrHome(s) {
   const d = L(s);
-  const pool = poolFor(s);
-  const today = pool[0];
+  const focus = d.purposes.find((p) => p.k === s.purpose) || d.purposes[0];
   return `
   <section class="screen screen--light">
-    <div class="screen__bg" style="background:radial-gradient(120% 50% at 50% 0%, rgba(109,94,248,.16), transparent 55%), var(--paper)"></div>
+    <div class="screen__bg" style="background:radial-gradient(130% 42% at 50% 0%, rgba(154,79,240,.16), transparent 55%), var(--paper)"></div>
     ${statusbar("light")}
-    <div class="app-head">
-      <div class="app-head__hi"><b>${d.hi(s.name || "friend")}</b><br><span>${d.homeSub}</span></div>
-      <div class="app-head__streak">🔥 7</div>
-    </div>
-    <div class="screen__body" style="padding-top:4px">
 
-      <!-- LUMI summon bar -->
-      <button class="summon" data-go="assistant">
-        <div class="summon__avatar">${lumiSVG("happy")}</div>
-        <div class="summon__bubble">${d.summonName(s.name || "friend")}</div>
+    <div class="home-head">
+      <div>
+        <div class="home-head__hi">${d.hi(s.name || "friend")}</div>
+        <div class="home-head__focus">${focus.e} ${focus.t} <span class="caret">⌄</span></div>
+      </div>
+      <div class="home-head__bell">🔔</div>
+    </div>
+
+    <div class="screen__body" style="padding-top:2px;padding-bottom:120px">
+
+      <!-- ★ prominent AI summon hero (re-awaken LUMI) -->
+      <button class="summon-hero" data-go="assistant">
+        <span class="summon-hero__char">${lumiSVG("think")}</span>
+        <span class="summon-hero__bubble">
+          <span class="summon-hero__q">${d.summonQ}</span>
+          <span class="go-round">${ICON.chev}</span>
+        </span>
       </button>
 
-      <div class="ai-card">
-        <div class="ai-card__label">${d.today}</div>
-        <h3>${scnLabel(today, s.lang)}</h3>
-        <p>${tt(today.s, s.lang)}</p>
-        <button class="btn" data-scenario="${today.k}" data-go="chat">${d.continueLesson}</button>
+      <!-- quick-start tiles -->
+      <div class="quick-card">
+        ${QUICK.map((q) => `
+        <button class="quick-tile" data-scenario="${q.k}" data-go="chat">
+          <b>${tt(q.t, s.lang)}</b>
+          <span class="quick-tile__ic">${q.e}<span class="quick-tile__spark">✦</span></span>
+        </button>`).join("")}
       </div>
 
-      <div class="sec-title"><b>${d.yourPath}</b><a data-go="library">${d.all}</a></div>
-      <div class="path">
-        <div class="path__rail"></div>
-        <div class="path__node">
-          <div class="path__dot done">✓</div>
-          <div class="path__card"><b>${tt(pool[0].t, s.lang)}</b><p>${d.cleared} · ${d.sumPron} 96</p></div>
-        </div>
-        <div class="path__node">
-          <div class="path__dot active">${pool[1].e}</div>
-          <div class="path__card active">
-            <b>${tt(pool[1].t, s.lang)}</b><p>${d.inProgress}</p>
-            <div class="path__tagrow">${tt(pool[1].tags, s.lang).map((t) => `<span class="tag-s">${t}</span>`).join("")}</div>
-          </div>
-        </div>
-        <div class="path__node">
-          <div class="path__dot">${pool[2].e}</div>
-          <div class="path__card"><b>${tt(pool[2].t, s.lang)}</b><p>${d.locked}</p></div>
-        </div>
-        <div class="path__node">
-          <div class="path__dot">${pool[3].e}</div>
-          <div class="path__card"><b>${tt(pool[3].t, s.lang)}</b><p>${d.upgrade}</p></div>
-        </div>
+      <!-- popular scenarios in your field -->
+      <div class="sec-title" style="margin-top:20px"><b>${d.popTitle}</b></div>
+      <div class="pop-grid">
+        ${POPULAR.map((p) => `
+        <div class="pop-card" data-scenario="${p.k}" data-go="chat">
+          <div class="pop-thumb pop-thumb--g${p.g}"><span>${p.e}</span></div>
+          <b>${tt(p.t, s.lang)}</b>
+          <span class="learners"><i class="learn-dot"></i>${d.learners(p.learners)}</span>
+        </div>`).join("")}
       </div>
     </div>
-    ${tabbar("learn", d)}
+
+    ${lumiFab(d)}
+    ${tabbar("home", d)}
   </section>`;
 }
 
@@ -510,6 +534,7 @@ function scrLibrary(s) {
         </div>`).join("")}
       </div>
     </div>
+    ${lumiFab(d)}
     ${tabbar("scn", d)}
   </section>`;
 }
@@ -557,6 +582,7 @@ function scrProfile(s) {
         ${d.settings.map((it) => `<div class="list-item"><span class="ic">${it.ic}</span> ${it.t} <span class="chev">${ICON.chev}</span></div>`).join("")}
       </div>
     </div>
+    ${lumiFab(d)}
     ${tabbar("me", d)}
   </section>`;
 }
@@ -572,7 +598,7 @@ const SCREENS = [
   { id: "recommend",   group: "首次进入 · Onboarding", title: "可直接开始的场景", desc: "按目的随机推可直接开练的场景，底部上划查看更多。", render: scrRecommend },
   { id: "chat",        group: "核心体验 · Practice", title: "场景对话", desc: "点击场景直接开练：AI 角色扮演 + 拼音/翻译 + 打分。", render: scrChat },
   { id: "summary",     group: "核心体验 · Practice", title: "通关结算", desc: "评分、解锁表达与 LUMI 的下一步建议。", render: scrSummary },
-  { id: "home",        group: "主应用 · App", title: "传统首页 · 召唤 LUMI", desc: "上划进入的传统首页，顶部头像+对话框随时召唤 LUMI。", render: scrHome },
+  { id: "home",        group: "主应用 · App", title: "传统首页 · LUMI 随时召唤", desc: "上划进入的首页：顶部大召唤条 + 悬浮按钮 + 底部首位 Tab，LUMI 全程突出、随时唤起。", render: scrHome },
   { id: "assistant",   group: "主应用 · App", title: "召唤 LUMI 对话", desc: "点击召唤入口，与 LUMI 开启对话（快捷指令）。", render: scrAssistant },
   { id: "library",     group: "主应用 · App", title: "场景库", desc: "按场景分类浏览、搜索、推荐。", render: scrLibrary },
   { id: "profile",     group: "主应用 · App", title: "我的", desc: "等级、能力雷达、成就与设置。", render: scrProfile },

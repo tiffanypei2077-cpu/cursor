@@ -1,16 +1,8 @@
 /* ============================================================
-   BizChinese — interactive prototype controller
-   Renders one screen at a time inside the phone frame and
-   handles clickable navigation between screens.
+   BizChinese — interactive prototype controller (LUMI edition)
    ============================================================ */
 
-const state = {
-  avatar: "yuyu",
-  branch: "new",
-  pain: "travel",
-  industry: "manufacturing",
-  scenario: "taxi",
-};
+const state = { name: "Alex", lang: "en", purpose: "work", scenario: "interview", shuffle: false };
 
 const screenEl = document.getElementById("screen");
 const crumbEl = document.getElementById("crumb");
@@ -20,6 +12,7 @@ let current = "welcome";
 function render(id) {
   const scr = SCREEN_MAP[id];
   if (!scr) return;
+  if (id === "recommend") state.shuffle = true; // fresh random picks on each arrival
   current = id;
   screenEl.innerHTML = scr.render(state);
   screenEl.scrollTop = 0;
@@ -29,38 +22,49 @@ function render(id) {
   bind();
 }
 
+function captureName() {
+  const inp = screenEl.querySelector("#nameInput");
+  if (inp && inp.value.trim()) state.name = inp.value.trim();
+}
+
 function bind() {
-  // capture preference selections, then navigate if data-go present
-  screenEl.querySelectorAll("[data-avatar]").forEach((el) =>
-    el.addEventListener("click", () => { state.avatar = el.dataset.avatar; render(current); })
+  // quick name chips
+  screenEl.querySelectorAll("[data-name]").forEach((el) =>
+    el.addEventListener("click", () => {
+      state.name = el.dataset.name;
+      const inp = screenEl.querySelector("#nameInput");
+      if (inp) inp.value = el.dataset.name;
+    })
   );
 
+  // shuffle recommendations in place
+  screenEl.querySelectorAll("[data-shuffle]").forEach((el) =>
+    el.addEventListener("click", () => { state.shuffle = true; render("recommend"); })
+  );
+
+  // navigation
   screenEl.querySelectorAll("[data-go]").forEach((el) => {
     el.addEventListener("click", () => {
-      if (el.dataset.branch) state.branch = el.dataset.branch;
-      if (el.dataset.pain) state.pain = el.dataset.pain;
-      if (el.dataset.industry) state.industry = el.dataset.industry;
+      if (current === "ask_name") captureName();
+      if (el.dataset.lang) state.lang = el.dataset.lang;
+      if (el.dataset.purpose) state.purpose = el.dataset.purpose;
       if (el.dataset.scenario) state.scenario = el.dataset.scenario;
       render(el.dataset.go);
     });
   });
 
-  // suggested replies in chat -> jump to summary (demo)
+  // suggested replies in chat -> finish to summary (demo)
   screenEl.querySelectorAll("[data-suggest]").forEach((el) =>
     el.addEventListener("click", () => render("summary"))
   );
 }
 
-// build the jump-to dropdown
 if (jumpEl) {
   jumpEl.innerHTML = SCREENS.map((s) => `<option value="${s.id}">${s.group} — ${s.title}</option>`).join("");
   jumpEl.addEventListener("change", () => render(jumpEl.value));
 }
-
-// restart button
 const restartBtn = document.getElementById("restart");
-if (restartBtn) restartBtn.addEventListener("click", () => render("welcome"));
+if (restartBtn) restartBtn.addEventListener("click", () => { state.name = "Alex"; state.lang = "en"; render("welcome"); });
 
-// boot from hash or welcome
 const start = location.hash.slice(1);
 render(SCREEN_MAP[start] ? start : "welcome");

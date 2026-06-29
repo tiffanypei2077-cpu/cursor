@@ -1,82 +1,76 @@
 /* ============================================================
-   BizChinese — SVG avatar mascots
-   Two AI helper characters the user picks from on first launch.
-   · 小语 Yuyu  — warm, patient coach (teal/green)
-   · 阿龙 Along — energetic, business-savvy buddy (gold/coral)
+   BizChinese — LUMI mascot
+   A single jelly/blob IP character (Pop Mart "yuki"-style,
+   NON human-shaped). Translucent, glowing, squishy & cute.
+   Used everywhere as the one AI buddy.
    ============================================================ */
 
-const AVATARS = {
-  yuyu: {
-    id: "yuyu",
-    name: "小语",
-    pinyin: "Yuyu",
-    tag: "耐心陪练",
-    blurb: "温柔耐心，陪你慢慢练，从不催你。",
-    svg: `
-<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="小语">
-  <defs>
-    <linearGradient id="yuyuBg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#34E0C4"/><stop offset="1" stop-color="#19A7CE"/>
-    </linearGradient>
-    <linearGradient id="yuyuHair" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#3A2D5C"/><stop offset="1" stop-color="#241B3D"/>
-    </linearGradient>
-  </defs>
-  <rect width="120" height="120" rx="28" fill="url(#yuyuBg)"/>
-  <circle cx="60" cy="56" r="40" fill="#FFE3CB"/>
-  <path d="M22 54c0-26 18-40 38-40s38 14 38 40c0 6-3 10-6 10 0-18-12-26-22-26-6 6-26 6-32 0-6 4-10 12-10 26-3 0-6-4-6-10z" fill="url(#yuyuHair)"/>
-  <circle cx="46" cy="58" r="5.2" fill="#2A2140"/>
-  <circle cx="74" cy="58" r="5.2" fill="#2A2140"/>
-  <circle cx="47.6" cy="56.2" r="1.7" fill="#fff"/>
-  <circle cx="75.6" cy="56.2" r="1.7" fill="#fff"/>
-  <ellipse cx="40" cy="68" rx="6" ry="4" fill="#FFB4A0" opacity="0.7"/>
-  <ellipse cx="80" cy="68" rx="6" ry="4" fill="#FFB4A0" opacity="0.7"/>
-  <path d="M52 70q8 7 16 0" stroke="#C2553F" stroke-width="3" fill="none" stroke-linecap="round"/>
-  <!-- headset (assistant) -->
-  <path d="M26 56a34 34 0 0 1 68 0" stroke="#19A7CE" stroke-width="4" fill="none"/>
-  <rect x="20" y="54" width="9" height="16" rx="4" fill="#127a93"/>
-  <rect x="91" y="54" width="9" height="16" rx="4" fill="#127a93"/>
-  <path d="M91 70c0 8-6 12-12 12" stroke="#127a93" stroke-width="3" fill="none" stroke-linecap="round"/>
-  <circle cx="79" cy="84" r="3.4" fill="#127a93"/>
-</svg>`,
-  },
-
-  along: {
-    id: "along",
-    name: "阿龙",
-    pinyin: "Along",
-    tag: "实战搭子",
-    blurb: "干练直接，带你冲商务实战，效率拉满。",
-    svg: `
-<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="阿龙">
-  <defs>
-    <linearGradient id="alongBg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#FFD479"/><stop offset="1" stop-color="#FF7A59"/>
-    </linearGradient>
-    <linearGradient id="alongHair" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#2C2030"/><stop offset="1" stop-color="#1A1220"/>
-    </linearGradient>
-  </defs>
-  <rect width="120" height="120" rx="28" fill="url(#alongBg)"/>
-  <circle cx="60" cy="56" r="40" fill="#FFD9B8"/>
-  <path d="M24 50c2-22 18-36 36-36s34 14 36 36c1 8-4 14-4 14-2-12-6-18-10-20-2 6-6 8-10 8 2-4 0-8-2-10-4 8-14 12-26 12-6 0-12-2-14-6-2 4-2 10-2 16 0 0-4-6-4-14z" fill="url(#alongHair)"/>
-  <circle cx="46" cy="58" r="5.2" fill="#2A1A12"/>
-  <circle cx="74" cy="58" r="5.2" fill="#2A1A12"/>
-  <circle cx="47.8" cy="56.2" r="1.7" fill="#fff"/>
-  <circle cx="75.8" cy="56.2" r="1.7" fill="#fff"/>
-  <path d="M40 50q6 -4 12 0" stroke="#2C2030" stroke-width="3" fill="none" stroke-linecap="round"/>
-  <path d="M68 50q6 -4 12 0" stroke="#2C2030" stroke-width="3" fill="none" stroke-linecap="round"/>
-  <ellipse cx="40" cy="68" rx="5.5" ry="3.6" fill="#FF9E7A" opacity="0.6"/>
-  <ellipse cx="80" cy="68" rx="5.5" ry="3.6" fill="#FF9E7A" opacity="0.6"/>
-  <path d="M50 72q10 8 20 0" stroke="#B5462E" stroke-width="3.4" fill="none" stroke-linecap="round"/>
-  <!-- collar / suit hint -->
-  <path d="M30 120v-8c0-6 12-10 30-10s30 4 30 10v8z" fill="#3A3550"/>
-  <path d="M52 102l8 10 8-10-8-4z" fill="#FF5C7A"/>
-</svg>`,
-  },
+const LUMI = {
+  name: "LUMI",
+  blurb: "你的商务汉语 AI 小伙伴",
 };
 
-function avatarSVG(id) {
-  const a = AVATARS[id] || AVATARS.yuyu;
-  return a.svg;
+/* mood: "happy" (default) | "wink" | "think" */
+function lumiSVG(mood = "happy") {
+  const eyeL =
+    mood === "wink"
+      ? `<path d="M71 104q9 -8 18 0" stroke="#3a2b5c" stroke-width="5" fill="none" stroke-linecap="round"/>`
+      : `<ellipse cx="80" cy="104" rx="9" ry="12" fill="#3a2b5c"/><circle cx="83.5" cy="99" r="3" fill="#fff"/>`;
+  const mouth =
+    mood === "think"
+      ? `<circle cx="100" cy="123" r="5" fill="#3a2b5c"/>`
+      : `<path d="M90 119 q10 11 20 0" stroke="#3a2b5c" stroke-width="4.5" fill="none" stroke-linecap="round"/>`;
+
+  return `
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="LUMI">
+  <defs>
+    <radialGradient id="lumiBody" cx="42%" cy="32%" r="78%">
+      <stop offset="0" stop-color="#D7FBFF"/>
+      <stop offset="36%" stop-color="#8FD8FF"/>
+      <stop offset="68%" stop-color="#A98BFF"/>
+      <stop offset="100%" stop-color="#F08CDC"/>
+    </radialGradient>
+    <linearGradient id="lumiGloss" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".95"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="lumiGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#A98BFF" stop-opacity=".6"/>
+      <stop offset="100%" stop-color="#A98BFF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <ellipse cx="100" cy="168" rx="50" ry="11" fill="#1a0f33" opacity=".18"/>
+  <circle cx="100" cy="100" r="94" fill="url(#lumiGlow)"/>
+
+  <!-- antenna / light -->
+  <path d="M104 40 q6 -16 18 -22" stroke="#A98BFF" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <circle cx="124" cy="15" r="9" fill="#FFE08A"/>
+  <circle cx="124" cy="15" r="16" fill="url(#lumiGlow)"/>
+
+  <!-- jelly body -->
+  <path d="M26 106 C26 58 58 34 100 34 C142 34 174 58 174 106 C174 144 148 164 100 164 C52 164 26 144 26 106 Z"
+        fill="url(#lumiBody)" fill-opacity="0.93" stroke="#ffffff" stroke-opacity=".55" stroke-width="2"/>
+
+  <!-- translucent inner core + gloss -->
+  <ellipse cx="94" cy="96" rx="60" ry="56" fill="#ffffff" opacity=".10"/>
+  <ellipse cx="74" cy="66" rx="27" ry="18" fill="url(#lumiGloss)" opacity=".85" transform="rotate(-18 74 66)"/>
+  <circle cx="132" cy="60" r="7" fill="#fff" opacity=".55"/>
+
+  <!-- feet nubs -->
+  <ellipse cx="78" cy="162" rx="13" ry="8" fill="url(#lumiBody)" fill-opacity=".93"/>
+  <ellipse cx="122" cy="162" rx="13" ry="8" fill="url(#lumiBody)" fill-opacity=".93"/>
+
+  <!-- face -->
+  ${eyeL}
+  <ellipse cx="120" cy="104" rx="9" ry="12" fill="#3a2b5c"/>
+  <circle cx="123.5" cy="99" r="3" fill="#fff"/>
+  <ellipse cx="63" cy="121" rx="9" ry="6" fill="#FF8FC4" opacity=".55"/>
+  <ellipse cx="137" cy="121" rx="9" ry="6" fill="#FF8FC4" opacity=".55"/>
+  ${mouth}
+
+  <!-- sparkles -->
+  <path d="M152 92 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3 z" fill="#fff" opacity=".9"/>
+  <circle cx="44" cy="70" r="3.2" fill="#fff" opacity=".8"/>
+</svg>`;
 }

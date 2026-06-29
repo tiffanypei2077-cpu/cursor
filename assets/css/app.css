@@ -586,26 +586,36 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  padding: 0 0 2px;
-  color: var(--violet);
+  gap: 6px;
+  padding: 6px 0 2px;
   animation: pullHint 1.9s ease-in-out infinite;
 }
-.pull-down__bar {
-  width: 42px; height: 5px;
-  border-radius: var(--r-pill);
-  background: rgba(154, 79, 240, 0.35);
-}
-.pull-down__row {
-  display: flex;
+.pull-down__pill {
+  display: inline-flex;
   align-items: center;
-  gap: 5px;
-  font-size: 12px;
-  font-weight: 700;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 800;
+  color: #fff;
+  background: var(--grad-ai);
+  padding: 8px 16px;
+  border-radius: var(--r-pill);
+  box-shadow: 0 8px 22px rgba(120, 90, 255, 0.45);
+}
+.pull-down__face {
+  width: 22px; height: 22px;
+  display: inline-block;
+}
+.pull-down__face svg { width: 100%; height: 100%; display: block; }
+.pull-down__pill svg:last-child { opacity: 0.9; }
+.pull-down__bar {
+  width: 64px; height: 5px;
+  border-radius: var(--r-pill);
+  background: rgba(154, 79, 240, 0.4);
 }
 @keyframes pullHint {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(4px); }
+  55% { transform: translateY(6px); }
 }
 
 /* 4-item tab bar with prominent AI tab */

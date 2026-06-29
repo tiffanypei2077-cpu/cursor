@@ -415,8 +415,12 @@ function scrHome(s) {
 
     <!-- pull down to chat with LUMI -->
     <button class="pull-down" data-go="assistant">
+      <span class="pull-down__pill">
+        <span class="pull-down__face">${lumiSVG("happy")}</span>
+        ${d.pullDown}
+        ${ICON.down}
+      </span>
       <span class="pull-down__bar"></span>
-      <span class="pull-down__row">${ICON.down} ${d.pullDown}</span>
     </button>
 
     <div class="home-head">

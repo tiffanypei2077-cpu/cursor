@@ -574,14 +574,16 @@
   box-shadow: 0 0 0 3px rgba(154, 79, 240, 0.15);
 }
 
-/* pull-down handle (top of home) -> start chatting with LUMI */
+/* pull-down handle (top of home) -> drag down to reveal LUMI chat */
 .pull-down {
   position: relative;
   z-index: 22;
   width: 100%;
   border: none;
   background: transparent;
-  cursor: pointer;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
   font-family: inherit;
   display: flex;
   flex-direction: column;
@@ -590,6 +592,42 @@
   padding: 6px 0 2px;
   animation: pullHint 1.9s ease-in-out infinite;
 }
+.pull-down:active { cursor: grabbing; }
+
+/* the chat sheet that slides down from the top */
+.pull-sheet {
+  z-index: 70;
+  transform: translateY(-100%);
+  border-radius: 0 0 30px 30px;
+  box-shadow: 0 26px 64px rgba(20, 12, 50, 0.45);
+  will-change: transform;
+}
+.pull-sheet.snap { transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1); }
+.pull-sheet__grip {
+  flex: none;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  touch-action: none;
+}
+.pull-sheet__grip::before {
+  content: "";
+  width: 50px; height: 5px;
+  border-radius: var(--r-pill);
+  background: rgba(26, 23, 51, 0.18);
+}
+.pull-sheet__grip:active { cursor: grabbing; }
+.pull-dim {
+  position: absolute;
+  inset: 0;
+  z-index: 68;
+  background: #07041a;
+  opacity: 0;
+  pointer-events: none;
+}
+.pull-dim.snap { transition: opacity 0.42s ease; }
 .pull-down__pill {
   display: inline-flex;
   align-items: center;

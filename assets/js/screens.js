@@ -409,19 +409,19 @@ function scrHome(s) {
   const d = L(s);
   const focus = d.purposes.find((p) => p.k === s.purpose) || d.purposes[0];
   return `
-  <section class="screen screen--light">
+  <section class="screen screen--light" data-home>
     <div class="screen__bg" style="background:radial-gradient(130% 42% at 50% 0%, rgba(154,79,240,.16), transparent 55%), var(--paper)"></div>
     ${statusbar("light")}
 
-    <!-- pull down to chat with LUMI -->
-    <button class="pull-down" data-go="assistant">
+    <!-- pull DOWN handle: drag down (or tap) to reveal LUMI chat -->
+    <div class="pull-down" data-pullopen role="button" tabindex="0">
       <span class="pull-down__pill">
         <span class="pull-down__face">${lumiSVG("happy")}</span>
         ${d.pullDown}
         ${ICON.down}
       </span>
       <span class="pull-down__bar"></span>
-    </button>
+    </div>
 
     <div class="home-head">
       <div>
@@ -464,19 +464,30 @@ function scrHome(s) {
     </div>
 
     ${tabbar("home", d)}
+
+    <!-- pull-down chat sheet (slides from the top) -->
+    <div class="pull-dim" data-dim></div>
+    <div class="pull-sheet screen chat screen--light" data-sheet>
+      ${assistantInner(s, true)}
+    </div>
   </section>`;
 }
 
 /* ============================================================
    9 · ASSISTANT — summoned LUMI chat
    ============================================================ */
-function scrAssistant(s) {
+/* shared assistant chat body (reused by full screen + pull-down sheet) */
+function assistantInner(s, inSheet) {
   const d = L(s);
+  const grip = inSheet ? `<div class="pull-sheet__grip" data-sheetgrip></div>` : "";
+  const back = inSheet
+    ? `<button class="iconbtn" data-pullclose aria-label="close">${ICON.up}</button>`
+    : `<button class="iconbtn" data-go="home">${ICON.back}</button>`;
   return `
-  <section class="screen chat screen--light">
+    ${grip}
     ${statusbar("light")}
     <div class="chat__nav">
-      <button class="iconbtn" data-go="home">${ICON.back}</button>
+      ${back}
       <div class="chat__title"><b>${d.asstTitle}</b><br><span>● online</span></div>
       <span class="chat__role-tag">✨ AI</span>
     </div>
@@ -494,8 +505,10 @@ function scrAssistant(s) {
         <div class="field">${d.asstField}</div>
         <div class="mic" data-go="recommend">${ICON.mic}</div>
       </div>
-    </div>
-  </section>`;
+    </div>`;
+}
+function scrAssistant(s) {
+  return `<section class="screen chat screen--light">${assistantInner(s, false)}</section>`;
 }
 
 /* ============================================================

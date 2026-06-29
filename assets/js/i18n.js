@@ -57,7 +57,7 @@ const STR = {
     quickTitle: "Jump straight in",
     popTitle: "Popular in your field",
     learners: (n) => `${n} learning`,
-    fab: "Ask LUMI",
+    pullDown: "Pull down to chat with LUMI",
 
     /* assistant (summoned LUMI) */
     asstTitle: "LUMI · your AI buddy",
@@ -157,7 +157,7 @@ const STR = {
     quickTitle: "快速开练",
     popTitle: "行业热门场景",
     learners: (n) => `${n} 人在学`,
-    fab: "问 LUMI",
+    pullDown: "下拉，和 LUMI 开始聊天",
 
     asstTitle: "LUMI · 你的 AI 小伙伴",
     asstHello: (n) => `我在呢，${n}。想做点什么？`,

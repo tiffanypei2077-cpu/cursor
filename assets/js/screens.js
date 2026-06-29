@@ -20,6 +20,7 @@ const ICON = {
   star: `<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17.8 5.9 20.4l1.5-6.8L2.2 9l6.9-.7z"/></svg>`,
   mic: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
   up: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 15l6-6 6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  down: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
 };
 
 const DEMO_STATE = { name: "Alex", lang: "en", purpose: "work", scenario: "interview", shuffle: false };
@@ -129,15 +130,6 @@ function tabbar(active, d) {
     <div class="tabbar__item ${active === "me" ? "on" : ""}" data-go="profile"><span class="ic">👤</span>${d.tabs.me}</div>
   </div>`;
 }
-/* always-on-call floating LUMI button */
-function lumiFab(d) {
-  return `<button class="lumi-fab" data-go="assistant" aria-label="${d.fab}">
-    <span class="lumi-fab__ring"></span>
-    <span class="lumi-fab__char">${lumiSVG("happy")}</span>
-    <span class="lumi-fab__tag">${d.fab}</span>
-  </button>`;
-}
-
 /* ---- quick-start tiles + popular cards for the home ---- */
 const QUICK = [
   { k: "trip", e: "🧳", t: { en: "Business trip", zh: "来中国出差" } },
@@ -421,6 +413,12 @@ function scrHome(s) {
     <div class="screen__bg" style="background:radial-gradient(130% 42% at 50% 0%, rgba(154,79,240,.16), transparent 55%), var(--paper)"></div>
     ${statusbar("light")}
 
+    <!-- pull down to chat with LUMI -->
+    <button class="pull-down" data-go="assistant">
+      <span class="pull-down__bar"></span>
+      <span class="pull-down__row">${ICON.down} ${d.pullDown}</span>
+    </button>
+
     <div class="home-head">
       <div>
         <div class="home-head__hi">${d.hi(s.name || "friend")}</div>
@@ -461,7 +459,6 @@ function scrHome(s) {
       </div>
     </div>
 
-    ${lumiFab(d)}
     ${tabbar("home", d)}
   </section>`;
 }
@@ -534,7 +531,6 @@ function scrLibrary(s) {
         </div>`).join("")}
       </div>
     </div>
-    ${lumiFab(d)}
     ${tabbar("scn", d)}
   </section>`;
 }
@@ -582,7 +578,6 @@ function scrProfile(s) {
         ${d.settings.map((it) => `<div class="list-item"><span class="ic">${it.ic}</span> ${it.t} <span class="chev">${ICON.chev}</span></div>`).join("")}
       </div>
     </div>
-    ${lumiFab(d)}
     ${tabbar("me", d)}
   </section>`;
 }

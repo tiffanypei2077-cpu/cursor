@@ -574,49 +574,38 @@
   box-shadow: 0 0 0 3px rgba(154, 79, 240, 0.15);
 }
 
-/* floating, always-on-call LUMI button */
-.lumi-fab {
-  position: absolute;
-  right: 16px; bottom: 92px;
-  z-index: 46;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+/* pull-down handle (top of home) -> start chatting with LUMI */
+.pull-down {
+  position: relative;
+  z-index: 22;
+  width: 100%;
   border: none;
   background: transparent;
   cursor: pointer;
-  padding: 0;
-}
-.lumi-fab__tag {
   font-family: inherit;
-  font-size: 12px;
-  font-weight: 800;
-  color: #fff;
-  background: var(--grad-ai);
-  padding: 7px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 0 0 2px;
+  color: var(--violet);
+  animation: pullHint 1.9s ease-in-out infinite;
+}
+.pull-down__bar {
+  width: 42px; height: 5px;
   border-radius: var(--r-pill);
-  box-shadow: var(--shadow-glow);
-  white-space: nowrap;
+  background: rgba(154, 79, 240, 0.35);
 }
-.lumi-fab__char {
-  position: relative;
-  width: 62px; height: 62px; flex: none;
-  filter: drop-shadow(0 10px 20px rgba(120, 90, 255, 0.55));
+.pull-down__row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 700;
 }
-.lumi-fab__char svg { width: 100%; height: 100%; position: relative; z-index: 2; }
-.lumi-fab__ring {
-  position: absolute;
-  right: 0; bottom: 0;
-  width: 62px; height: 62px;
-  border-radius: 50%;
-  background: var(--grad-ai);
-  opacity: 0.55;
-  animation: fabPing 2s ease-out infinite;
-}
-@keyframes fabPing {
-  0% { transform: scale(0.75); opacity: 0.55; }
-  70% { transform: scale(1.5); opacity: 0; }
-  100% { opacity: 0; }
+@keyframes pullHint {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
 }
 
 /* 4-item tab bar with prominent AI tab */

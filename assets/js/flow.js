@@ -2,7 +2,7 @@
    BizChinese — interactive prototype controller (LUMI edition)
    ============================================================ */
 
-const state = { name: "Alex", lang: "en", purpose: "work", scenario: "interview", shuffle: false };
+const state = { name: "Alex", lang: "en", purpose: "work", industry: "nev", scenario: "interview", asstMode: "menu", shuffle: false };
 
 const screenEl = document.getElementById("screen");
 const crumbEl = document.getElementById("crumb");
@@ -109,13 +109,21 @@ function bind() {
     el.addEventListener("click", () => { state.shuffle = true; render("recommend"); })
   );
 
+  // LUMI quick actions (practice / translate / learn) -> open full assistant in that mode
+  screenEl.querySelectorAll("[data-asst]").forEach((el) =>
+    el.addEventListener("click", () => { state.asstMode = el.dataset.asst; render("assistant"); })
+  );
+
   // navigation
   screenEl.querySelectorAll("[data-go]").forEach((el) => {
     el.addEventListener("click", () => {
       if (current === "ask_name") captureName();
       if (el.dataset.lang) state.lang = el.dataset.lang;
       if (el.dataset.purpose) state.purpose = el.dataset.purpose;
+      if (el.dataset.industry) state.industry = el.dataset.industry;
       if (el.dataset.scenario) state.scenario = el.dataset.scenario;
+      // summoning LUMI afresh (not via a quick action) shows the option menu
+      if (el.dataset.go === "assistant" && !el.dataset.asst) state.asstMode = "menu";
       render(el.dataset.go);
     });
   });

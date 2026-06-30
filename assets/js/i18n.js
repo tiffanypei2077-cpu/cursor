@@ -31,6 +31,22 @@ const STR = {
       { k: "growth", e: "🌱", t: "Personal growth", d: "I just want to level up my Chinese" },
     ],
 
+    /* industry */
+    industryQ: (n) => `And which industry are you in, ${n}?`,
+    industries: [
+      { k: "nev", e: "🚗", t: "New-energy vehicles" },
+      { k: "solar", e: "☀️", t: "Solar / new-energy equipment" },
+      { k: "telecom", e: "📡", t: "Telecom / hardware" },
+      { k: "ecommerce", e: "🛒", t: "Cross-border e-commerce" },
+      { k: "internet", e: "🎮", t: "Internet / gaming" },
+      { k: "construction", e: "🏗️", t: "Infrastructure / construction" },
+      { k: "mining", e: "⛏️", t: "Mining / resources" },
+      { k: "retail", e: "🛍️", t: "Consumer goods / retail" },
+      { k: "edu", e: "🎓", t: "Vocational education" },
+      { k: "fintech", e: "💳", t: "Fintech" },
+      { k: "other", e: "✨", t: "Other" },
+    ],
+
     /* recommend */
     recIntro: "Got it! Here are a few scenarios<br>you can start right now 👇",
     recShuffle: "Shuffle",
@@ -61,9 +77,37 @@ const STR = {
 
     /* assistant (summoned LUMI) */
     asstTitle: "LUMI · your AI buddy",
-    asstHello: (n) => `I'm right here, ${n}. What do you feel like doing?`,
-    asstPrompts: ["🎬 Practice a scenario", "🌐 Translate a sentence", "📚 What should I learn today?", "💡 Explain a word"],
-    asstField: "Ask LUMI anything…",
+    asstHello: (n) => `Hi ${n}! What do you feel like to do today?`,
+    asstPrompts: [
+      { k: "practice", t: "🎬 Practice a scenario", say: "Practice a scenario" },
+      { k: "translate", t: "🌐 Translate a sentence", say: "Translate a sentence" },
+      { k: "learn", t: "📚 What should I learn today?", say: "What should I learn today?" },
+    ],
+    asstField: "Type a sentence or tap 🎙 to speak…",
+    asstPracticeReply: "Nice! Here are a few you can start right now — general picks + ones for your field 👇",
+    pcGeneral: "General",
+    pcVisit: "client visit",
+    pcPitch: "product pitch",
+    asstTranslateReply: "Sure! Type any sentence in the box below and I'll turn it into natural Business Chinese. For example 👇",
+    transFrom: "You",
+    translateEx: { src: { en: "Can we move our meeting to tomorrow afternoon?", zh: "会议能不能挪到明天下午？" }, zh: "我们能把会议改到明天下午吗？", py: "Wǒmen néng bǎ huìyì gǎi dào míngtiān xiàwǔ ma?" },
+    asstLearnReply: "Based on your goal and field, here's what I'd focus on today:",
+    learnItems: ["Politely chasing a reply on WeChat", "3 ways to soften a “no”", "Saying numbers & quotes clearly on a call"],
+    asstCourseTitle: "Business email essentials",
+    asstCourseLink: "open course →",
+
+    /* course (placeholder) */
+    courseBadge: "COURSE",
+    courseMeta: "12 lessons · ~35 min",
+    courseProgress: "20% complete",
+    courseLessonsTitle: "Lessons",
+    courseLessons: [
+      { t: "Opening lines & greetings", done: true },
+      { t: "Making a clear request", done: true },
+      { t: "Following up politely", done: false },
+      { t: "Closing & sign-off", done: false },
+    ],
+    courseCta: "Continue learning",
 
     /* chat */
     chatGoal: "GOAL",
@@ -133,6 +177,21 @@ const STR = {
       { k: "growth", e: "🌱", t: "个人发展", d: "想把中文水平提上去" },
     ],
 
+    industryQ: (n) => `${n}，您目前从事于什么行业？`,
+    industries: [
+      { k: "nev", e: "🚗", t: "新能源汽车" },
+      { k: "solar", e: "☀️", t: "光伏 / 新能源设备" },
+      { k: "telecom", e: "📡", t: "通信 / 硬件" },
+      { k: "ecommerce", e: "🛒", t: "跨境电商" },
+      { k: "internet", e: "🎮", t: "互联网 / 游戏" },
+      { k: "construction", e: "🏗️", t: "基建 / 工程 / 建筑" },
+      { k: "mining", e: "⛏️", t: "矿业 / 资源" },
+      { k: "retail", e: "🛍️", t: "消费品 / 零售" },
+      { k: "edu", e: "🎓", t: "职业教育" },
+      { k: "fintech", e: "💳", t: "金融科技" },
+      { k: "other", e: "✨", t: "其他" },
+    ],
+
     recIntro: "好嘞！这几个场景<br>现在就能直接开练 👇",
     recShuffle: "换一批",
     recSwipe: "上划查看更多场景",
@@ -160,9 +219,36 @@ const STR = {
     pullDown: "下拉，和 LUMI 开始聊天",
 
     asstTitle: "LUMI · 你的 AI 小伙伴",
-    asstHello: (n) => `我在呢，${n}。想做点什么？`,
-    asstPrompts: ["🎬 练一个场景", "🌐 翻译一句话", "📚 今天学点什么？", "💡 解释一个词"],
-    asstField: "有问题尽管问 LUMI…",
+    asstHello: (n) => `${n}，今天想做点什么？`,
+    asstPrompts: [
+      { k: "practice", t: "🎬 练一个场景", say: "练一个场景" },
+      { k: "translate", t: "🌐 翻译一句话", say: "翻译一句话" },
+      { k: "learn", t: "📚 今天学点什么？", say: "今天学点什么？" },
+    ],
+    asstField: "输入句子，或点 🎙 说话…",
+    asstPracticeReply: "好嘞！这几个现在就能开练 —— 通用 + 你行业相关的 👇",
+    pcGeneral: "通用",
+    pcVisit: "客户拜访",
+    pcPitch: "产品技术介绍",
+    asstTranslateReply: "没问题！在下面输入任意句子，我帮你翻成地道的商务中文。比如 👇",
+    transFrom: "你",
+    translateEx: { src: { en: "Can we move our meeting to tomorrow afternoon?", zh: "会议能不能挪到明天下午？" }, zh: "我们能把会议改到明天下午吗？", py: "Wǒmen néng bǎ huìyì gǎi dào míngtiān xiàwǔ ma?" },
+    asstLearnReply: "结合你的目标和行业，今天建议你重点学：",
+    learnItems: ["在微信上礼貌地催回复", "3 种委婉说“不”的方式", "电话里把数字和报价说清楚"],
+    asstCourseTitle: "商务邮件高频表达",
+    asstCourseLink: "去课程学习 →",
+
+    courseBadge: "课程",
+    courseMeta: "12 节课 · 约 35 分钟",
+    courseProgress: "已完成 20%",
+    courseLessonsTitle: "课程目录",
+    courseLessons: [
+      { t: "开头问候与称呼", done: true },
+      { t: "清楚地提出请求", done: true },
+      { t: "礼貌地跟进催办", done: false },
+      { t: "结尾与落款", done: false },
+    ],
+    courseCta: "继续学习",
 
     chatGoal: "本关目标",
     chatRole: "AI 角色扮演",

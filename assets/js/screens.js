@@ -23,7 +23,12 @@ const ICON = {
   down: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
 };
 
-const DEMO_STATE = { name: "Alex", lang: "en", purpose: "work", scenario: "interview", shuffle: false };
+const DEMO_STATE = { name: "Alex", lang: "en", purpose: "work", industry: "nev", scenario: "interview", asstMode: "menu", shuffle: false };
+
+/* onboarding step dots (4 steps total) */
+function stepsDots(n) {
+  return `<div class="steps">${[1, 2, 3, 4].map((i) => `<i class="${i <= n ? "on" : ""}"></i>`).join("")}</div>`;
+}
 
 /* ============================================================
    Scenario data — "can start right now" sets, per purpose
@@ -179,8 +184,8 @@ function scrAskName(s) {
     <div class="screen__bg screen__bg--ai"></div>
     ${statusbar()}
     <div class="screen__body">
-      <div class="steps" style="margin-top:4px"><i class="on"></i><i></i><i></i></div>
-      <p class="muted" style="margin-top:14px">Step 1 of 3</p>
+      ${stepsDots(1)}
+      <p class="muted" style="margin-top:14px">Step 1 of 4</p>
 
       <div class="assistant-row" style="margin-top:8px">
         ${lumiHead(56)}
@@ -212,8 +217,8 @@ function scrAskLanguage(s) {
     <div class="screen__bg screen__bg--ai"></div>
     ${statusbar()}
     <div class="screen__body">
-      <div class="steps" style="margin-top:4px"><i class="on"></i><i class="on"></i><i></i></div>
-      <p class="muted" style="margin-top:14px">Step 2 of 3</p>
+      ${stepsDots(2)}
+      <p class="muted" style="margin-top:14px">Step 2 of 4</p>
 
       <div class="assistant-row" style="margin-top:8px">
         ${lumiHead(56)}
@@ -241,8 +246,8 @@ function scrAskPurpose(s) {
     <div class="screen__bg screen__bg--ai"></div>
     ${statusbar()}
     <div class="screen__body">
-      <div class="steps" style="margin-top:4px"><i class="on"></i><i class="on"></i><i class="on"></i></div>
-      <p class="muted" style="margin-top:14px">${d.step(3, 3)}</p>
+      ${stepsDots(3)}
+      <p class="muted" style="margin-top:14px">${d.step(3, 4)}</p>
 
       <div class="assistant-row" style="margin-top:8px">
         ${lumiHead(56)}
@@ -251,10 +256,38 @@ function scrAskPurpose(s) {
 
       <div class="bubbles">
         ${d.purposes.map((p) => `
-        <button class="bubble ${s.purpose === p.k ? "is-selected" : ""}" data-purpose="${p.k}" data-go="recommend">
+        <button class="bubble ${s.purpose === p.k ? "is-selected" : ""}" data-purpose="${p.k}" data-go="ask_industry">
           <span class="bubble__icon">${p.e}</span>
           <span class="bubble__txt"><b>${p.t}</b><span>${p.d}</span></span>
           <span class="bubble__chev">${ICON.chev}</span>
+        </button>`).join("")}
+      </div>
+    </div>
+  </section>`;
+}
+
+/* ============================================================
+   4.5 · ASK INDUSTRY — chat (now in chosen language)
+   ============================================================ */
+function scrAskIndustry(s) {
+  const d = L(s);
+  return `
+  <section class="screen">
+    <div class="screen__bg screen__bg--ai"></div>
+    ${statusbar()}
+    <div class="screen__body">
+      ${stepsDots(4)}
+      <p class="muted" style="margin-top:14px">${d.step(4, 4)}</p>
+
+      <div class="assistant-row" style="margin-top:8px">
+        ${lumiHead(56)}
+        <div class="speech speech--lg">${d.industryQ(s.name || "friend")}</div>
+      </div>
+
+      <div class="ind-grid">
+        ${d.industries.map((o) => `
+        <button class="ind-card ${s.industry === o.k ? "is-selected" : ""}" data-industry="${o.k}" data-go="recommend">
+          <span class="ind-card__icon">${o.e}</span><b>${o.t}</b>
         </button>`).join("")}
       </div>
     </div>
@@ -476,13 +509,70 @@ function scrHome(s) {
 /* ============================================================
    9 · ASSISTANT — summoned LUMI chat
    ============================================================ */
+/* build "practice a scenario" cards: general picks + industry-specific */
+function practiceCards(s) {
+  const d = L(s);
+  const ind = d.industries.find((x) => x.k === s.industry) || d.industries[d.industries.length - 1];
+  const genPool = [SCN.work[0], SCN.growth[1], SCN.growth[3], SCN.work[1]];
+  const gen = shuffled(genPool).slice(0, 2).map((o) => ({ k: o.k, e: o.e, title: tt(o.t, s.lang), badge: d.pcGeneral, kind: "gen" }));
+  const indCards = [
+    { k: "visit", e: "🤝", title: `${ind.t} · ${d.pcVisit}`, badge: ind.t, kind: "ind" },
+    { k: "expo", e: "📊", title: `${ind.t} · ${d.pcPitch}`, badge: ind.t, kind: "ind" },
+  ];
+  return [...gen, ...indCards];
+}
+
 /* shared assistant chat body (reused by full screen + pull-down sheet) */
 function assistantInner(s, inSheet) {
   const d = L(s);
+  const mode = inSheet ? "menu" : (s.asstMode || "menu");
   const grip = inSheet ? `<div class="pull-sheet__grip" data-sheetgrip></div>` : "";
   const back = inSheet
     ? `<button class="iconbtn" data-pullclose aria-label="close">${ICON.up}</button>`
     : `<button class="iconbtn" data-go="home">${ICON.back}</button>`;
+
+  let body = `
+    <div class="msg msg--in">
+      <div class="msg__avatar">${lumiSVG("happy")}</div>
+      <div class="bubble-chat">${d.asstHello(s.name || "friend")}</div>
+    </div>`;
+
+  if (mode === "menu") {
+    body += `<div class="asst-prompts">${d.asstPrompts
+      .map((p) => `<button class="asst-prompt" data-asst="${p.k}">${p.t}</button>`)
+      .join("")}</div>`;
+  } else {
+    const chosen = d.asstPrompts.find((p) => p.k === mode);
+    body += `<div class="msg msg--out"><div class="bubble-chat">${chosen ? chosen.say : ""}</div></div>`;
+
+    if (mode === "practice") {
+      body += `<div class="msg msg--in"><div class="msg__avatar">${lumiSVG("happy")}</div><div class="bubble-chat">${d.asstPracticeReply}</div></div>`;
+      body += `<div class="asst-scn-list">${practiceCards(s)
+        .map((c) => `
+        <button class="asst-scn" data-scenario="${c.k}" data-go="chat">
+          <span class="asst-scn__e">${c.e}</span>
+          <span class="asst-scn__tx"><b>${c.title}</b><span class="asst-scn__badge asst-scn__badge--${c.kind}">${c.badge}</span></span>
+          ${ICON.chev}
+        </button>`).join("")}</div>`;
+    } else if (mode === "translate") {
+      body += `<div class="msg msg--in"><div class="msg__avatar">${lumiSVG("happy")}</div><div class="bubble-chat">${d.asstTranslateReply}</div></div>`;
+      body += `<div class="trans-card">
+        <div class="trans-card__row"><span class="trans-card__tag">${d.transFrom}</span><span>${tt(d.translateEx.src, s.lang)}</span></div>
+        <div class="trans-card__arrow">↓</div>
+        <div class="trans-card__row trans-card__row--zh"><span class="trans-card__tag">中文</span><span><span class="pinyin">${d.translateEx.py}</span>${d.translateEx.zh}</span></div>
+      </div>`;
+    } else if (mode === "learn") {
+      body += `<div class="msg msg--in"><div class="msg__avatar">${lumiSVG("happy")}</div><div class="bubble-chat">${d.asstLearnReply}
+        <ul class="learn-list">${d.learnItems.map((it) => `<li>${it}</li>`).join("")}</ul>
+        <button class="course-link" data-go="course">📘 ${d.asstCourseTitle} · ${d.asstCourseLink}</button>
+      </div></div>`;
+    }
+  }
+
+  const switchRow = mode === "menu" ? "" : `<div class="suggest suggest--asst">${d.asstPrompts
+    .map((p) => `<button data-asst="${p.k}">${p.t}</button>`)
+    .join("")}</div>`;
+
   return `
     ${grip}
     ${statusbar("light")}
@@ -491,24 +581,55 @@ function assistantInner(s, inSheet) {
       <div class="chat__title"><b>${d.asstTitle}</b><br><span>● online</span></div>
       <span class="chat__role-tag">✨ AI</span>
     </div>
-    <div class="chat__body">
-      <div class="msg msg--in">
-        <div class="msg__avatar">${lumiSVG("happy")}</div>
-        <div class="bubble-chat">${d.asstHello(s.name || "friend")}</div>
-      </div>
-      <div class="asst-prompts">
-        ${d.asstPrompts.map((p, i) => `<button class="asst-prompt" data-go="${i === 0 ? "recommend" : "chat"}">${p}</button>`).join("")}
-      </div>
-    </div>
+    <div class="chat__body">${body}</div>
     <div class="chat__foot">
+      ${switchRow}
       <div class="chat__inputbar">
         <div class="field">${d.asstField}</div>
-        <div class="mic" data-go="recommend">${ICON.mic}</div>
+        <div class="mic">${ICON.mic}</div>
       </div>
     </div>`;
 }
-function scrAssistant(s) {
+function assistantScreen(s) {
   return `<section class="screen chat screen--light">${assistantInner(s, false)}</section>`;
+}
+const scrAssistant = assistantScreen;
+
+/* ============================================================
+   9.5 · COURSE — fake placeholder course the "learn" link jumps to
+   ============================================================ */
+function scrCourse(s) {
+  const d = L(s);
+  return `
+  <section class="screen screen--light">
+    <div class="screen__bg" style="background:var(--paper)"></div>
+    ${statusbar("light")}
+    <div class="chat__nav">
+      <button class="iconbtn" data-go="assistant">${ICON.back}</button>
+      <div class="chat__title"><b>${d.courseLessonsTitle === "Lessons" ? "Course" : "课程"}</b></div>
+    </div>
+    <div class="screen__body" style="padding-top:10px">
+      <div class="course-hero">
+        <span class="course-hero__badge">📘 ${d.courseBadge}</span>
+        <h2>${d.asstCourseTitle}</h2>
+        <p>${d.courseMeta}</p>
+        <div class="course-hero__bar"><i style="width:20%"></i></div>
+        <span class="course-hero__prog">${d.courseProgress}</span>
+      </div>
+
+      <div class="sec-title" style="margin-top:18px"><b>${d.courseLessonsTitle}</b></div>
+      <div class="list-card">
+        ${d.courseLessons.map((l, i) => `
+        <div class="list-item">
+          <span class="ic">${l.done ? "✅" : i === 2 ? "▶️" : "🔒"}</span> ${l.t}
+          <span class="chev">${l.done ? "" : ICON.chev}</span>
+        </div>`).join("")}
+      </div>
+    </div>
+    <div class="screen__footer">
+      <button class="btn" data-go="chat">${d.courseCta}</button>
+    </div>
+  </section>`;
 }
 
 /* ============================================================
@@ -607,11 +728,16 @@ const SCREENS = [
   { id: "ask_name",    group: "首次进入 · Onboarding", title: "聊天 · 问名字", desc: "进入聊天环节，LUMI 询问用户名字（后端记录）。", render: scrAskName },
   { id: "ask_language",group: "首次进入 · Onboarding", title: "聊天 · 选学习语言", desc: "选择讲解语言并记录，后续提问都用该语言。", render: scrAskLanguage },
   { id: "ask_purpose", group: "首次进入 · Onboarding", title: "聊天 · 学习目的", desc: "在华工作 / 对接客户供应商 / 进入市场 / 个人发展。", render: scrAskPurpose },
+  { id: "ask_industry",group: "首次进入 · Onboarding", title: "聊天 · 所在行业", desc: "新能源汽车 / 光伏 / 通信 / 跨境电商 / 互联网 …… 共 11 个行业。", render: scrAskIndustry },
   { id: "recommend",   group: "首次进入 · Onboarding", title: "可直接开始的场景", desc: "按目的随机推可直接开练的场景，底部上划查看更多。", render: scrRecommend },
   { id: "chat",        group: "核心体验 · Practice", title: "场景对话", desc: "点击场景直接开练：AI 角色扮演 + 拼音/翻译 + 打分。", render: scrChat },
   { id: "summary",     group: "核心体验 · Practice", title: "通关结算", desc: "评分、解锁表达与 LUMI 的下一步建议。", render: scrSummary },
   { id: "home",        group: "主应用 · App", title: "传统首页 · LUMI 随时召唤", desc: "上划进入的首页：顶部大召唤条 + 悬浮按钮 + 底部首位 Tab，LUMI 全程突出、随时唤起。", render: scrHome },
-  { id: "assistant",   group: "主应用 · App", title: "召唤 LUMI 对话", desc: "点击召唤入口，与 LUMI 开启对话（快捷指令）。", render: scrAssistant },
+  { id: "assistant",   group: "主应用 · App", title: "召唤 LUMI · 选项", desc: "唤起 AI：练场景 / 翻译一句话 / 今天学点什么 + 自由输入。", render: scrAssistant },
+  { id: "asst_practice", group: "主应用 · App", title: "唤起 AI · 练场景", desc: "随机给出通用 + 行业相关场景卡片，点卡片直接开聊。", render: (s) => assistantScreen({ ...s, asstMode: "practice" }) },
+  { id: "asst_translate",group: "主应用 · App", title: "唤起 AI · 翻译", desc: "发送翻译指令，LUMI 开始把句子翻成地道商务中文。", render: (s) => assistantScreen({ ...s, asstMode: "translate" }) },
+  { id: "asst_learn",  group: "主应用 · App", title: "唤起 AI · 今天学什么", desc: "给出今日可学内容 + 跳转课程链接（占位）。", render: (s) => assistantScreen({ ...s, asstMode: "learn" }) },
+  { id: "course",      group: "主应用 · App", title: "课程页（占位）", desc: "从「今天学什么」跳转到的假课程页。", render: scrCourse },
   { id: "library",     group: "主应用 · App", title: "场景库", desc: "按场景分类浏览、搜索、推荐。", render: scrLibrary },
   { id: "profile",     group: "主应用 · App", title: "我的", desc: "等级、能力雷达、成就与设置。", render: scrProfile },
 ];

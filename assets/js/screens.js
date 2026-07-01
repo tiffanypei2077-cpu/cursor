@@ -730,8 +730,6 @@ const SCREENS = [
   { id: "ask_purpose", group: "首次进入 · Onboarding", title: "聊天 · 学习目的", desc: "在华工作 / 对接客户供应商 / 进入市场 / 个人发展。", render: scrAskPurpose },
   { id: "ask_industry",group: "首次进入 · Onboarding", title: "聊天 · 所在行业", desc: "新能源汽车 / 光伏 / 通信 / 跨境电商 / 互联网 …… 共 11 个行业。", render: scrAskIndustry },
   { id: "recommend",   group: "首次进入 · Onboarding", title: "可直接开始的场景", desc: "按目的随机推可直接开练的场景，底部上划查看更多。", render: scrRecommend },
-  { id: "chat",        group: "核心体验 · Practice", title: "场景对话", desc: "点击场景直接开练：AI 角色扮演 + 拼音/翻译 + 打分。", render: scrChat },
-  { id: "summary",     group: "核心体验 · Practice", title: "通关结算", desc: "评分、解锁表达与 LUMI 的下一步建议。", render: scrSummary },
   { id: "home",        group: "主应用 · App", title: "传统首页 · LUMI 随时召唤", desc: "上划进入的首页：顶部大召唤条 + 悬浮按钮 + 底部首位 Tab，LUMI 全程突出、随时唤起。", render: scrHome },
   { id: "assistant",   group: "主应用 · App", title: "召唤 LUMI · 选项", desc: "唤起 AI：练场景 / 翻译一句话 / 今天学点什么 + 自由输入。", render: scrAssistant },
   { id: "asst_practice", group: "主应用 · App", title: "唤起 AI · 练场景", desc: "随机给出通用 + 行业相关场景卡片，点卡片直接开聊。", render: (s) => assistantScreen({ ...s, asstMode: "practice" }) },

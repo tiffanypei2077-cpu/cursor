@@ -128,9 +128,13 @@ function bind() {
     });
   });
 
-  // suggested replies in chat -> finish to summary (demo)
-  screenEl.querySelectorAll("[data-suggest]").forEach((el) =>
-    el.addEventListener("click", () => render("summary"))
+  // AI message "translate" toggle inside scenario chat
+  screenEl.querySelectorAll("[data-xlate]").forEach((el) =>
+    el.addEventListener("click", () => {
+      const msg = el.closest(".dh-msg");
+      const t = msg && msg.querySelector(".dh-trans");
+      if (t) t.hidden = !t.hidden;
+    })
   );
 }
 

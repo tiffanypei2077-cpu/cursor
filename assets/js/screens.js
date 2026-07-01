@@ -80,36 +80,48 @@ function shuffled(arr) { return [...arr].sort(() => Math.random() - 0.5); }
 const DIALOGUES = {
   interview: {
     emoji: "💼", role: { en: "Interviewer", zh: "面试官" },
-    goal: { en: "Introduce yourself, state a strength, ask one question back", zh: "自我介绍、说明优势、反问一个问题" },
+    char: { aiName: { en: "Manager Wang", zh: "王经理" }, youName: { en: "Candidate", zh: "求职者" } },
+    brief: {
+      en: "Please role-play as the candidate and interview with Manager Wang. Introduce yourself, explain why you're a good fit, and ask one question about the team. Keep it polite and professional throughout.",
+      zh: "请扮演求职者，与王经理进行面试。做自我介绍、说明你为什么合适，并就团队情况反问一个问题。全程保持礼貌、专业的态度。",
+    },
     turns: [
       { who: "in", cn: "你好，请先简单做个自我介绍吧。", py: "Nǐ hǎo, qǐng xiān jiǎndān zuò ge zìwǒ jièshào ba.", tr: { en: "Hi, please give a short self-introduction.", zh: "你好，请先简单做个自我介绍。" } },
-      { who: "out", cn: "您好，我叫 Alex，有五年市场经验，很高兴来面试。", py: "Nín hǎo, wǒ jiào Alex, yǒu wǔ nián shìchǎng jīngyàn, hěn gāoxìng lái miànshì.", tr: { en: "Hello, I'm Alex, I have 5 years of marketing experience. Glad to be here.", zh: "您好，我叫 Alex，有五年市场经验，很高兴来面试。" }, score: 96 },
+      { who: "out", cn: "您好，我叫 Alex，有五年市场经验，很高兴来面试。", py: "Nín hǎo, wǒ jiào Alex, yǒu wǔ nián shìchǎng jīngyàn.", tr: { en: "Hello, I'm Alex, I have 5 years of marketing experience.", zh: "您好，我叫 Alex，有五年市场经验，很高兴来面试。" }, tag: "pron", eval: { word: "A", vocab: 96, pron: 96, expr: "A" } },
       { who: "in", cn: "很好。你为什么想加入我们公司？", py: "Hěn hǎo. Nǐ wèishéme xiǎng jiārù wǒmen gōngsī?", tr: { en: "Great. Why do you want to join our company?", zh: "很好。你为什么想加入我们公司？" } },
+      { who: "out", cn: "贵司在行业里是领头羊，我很认同你们的方向。", py: "Guì sī zài hángyè lǐ shì lǐngtóuyáng, wǒ hěn rèntóng nǐmen de fāngxiàng.", tr: { en: "Your company is a leader in the field, and I really believe in your direction.", zh: "贵司在行业里是领头羊，我很认同你们的方向。" }, tag: "effort", eval: { word: "A", vocab: 92, pron: 90, expr: "B+" } },
+      { who: "in", cn: "说得不错。那你觉得自己最大的优势是什么？", py: "Shuō de búcuò. Nà nǐ juéde zìjǐ zuì dà de yōushì shì shénme?", tr: { en: "Well said. So what would you say is your biggest strength?", zh: "说得不错。那你觉得自己最大的优势是什么？" } },
     ],
-    coach: { en: "Tip: finish with a question like “团队多大？” to show real interest.", zh: "小提示：可以反问一句“团队多大？”，显得更有兴趣。" },
-    suggest: ["因为贵司产品很棒。", "我带过 8 人团队。", "团队大概多少人？"],
   },
   expo: {
     emoji: "🤝", role: { en: "Booth visitor", zh: "展位客户" },
-    goal: { en: "Greet, give a one-line pitch, invite to leave contact", zh: "打招呼、一句话介绍、邀请留联系方式" },
+    char: { aiName: { en: "Mr. Zhang (client)", zh: "张先生（客户）" }, youName: { en: "Exhibitor", zh: "参展方" } },
+    brief: {
+      en: "Please role-play as the exhibitor at your booth. Greet Mr. Zhang, pitch your product in one sentence, and invite him to leave his contact. Stay warm and confident.",
+      zh: "请扮演展位上的参展方。向张先生打招呼、用一句话介绍你的产品，并邀请他留下联系方式。保持热情、自信。",
+    },
     turns: [
       { who: "in", cn: "你好，你们这个产品是做什么的？", py: "Nǐ hǎo, nǐmen zhège chǎnpǐn shì zuò shénme de?", tr: { en: "Hi, what does your product do?", zh: "你好，你们这个产品是做什么的？" } },
-      { who: "out", cn: "您好，我们帮工厂降低 30% 的能耗，欢迎了解一下。", py: "Nín hǎo, wǒmen bāng gōngchǎng jiàngdī bǎifēnzhī sānshí de nénghào.", tr: { en: "Hello, we help factories cut energy use by 30%. Take a look!", zh: "您好，我们帮工厂降低 30% 的能耗，欢迎了解一下。" }, score: 94 },
+      { who: "out", cn: "您好，我们帮工厂降低 30% 的能耗，欢迎了解一下。", py: "Nín hǎo, wǒmen bāng gōngchǎng jiàngdī bǎifēnzhī sānshí de nénghào.", tr: { en: "Hello, we help factories cut energy use by 30%. Take a look!", zh: "您好，我们帮工厂降低 30% 的能耗，欢迎了解一下。" }, tag: "pron", eval: { word: "A", vocab: 94, pron: 93, expr: "A" } },
       { who: "in", cn: "听起来不错，有资料吗？", py: "Tīng qǐlái búcuò, yǒu zīliào ma?", tr: { en: "Sounds good, do you have a brochure?", zh: "听起来不错，有资料吗？" } },
+      { who: "out", cn: "有的，加个微信我发您详细资料。", py: "Yǒu de, jiā ge wēixìn wǒ fā nín xiángxì zīliào.", tr: { en: "Yes—let's add WeChat and I'll send you the details.", zh: "有的，加个微信我发您详细资料。" }, tag: "fluent", eval: { word: "A", vocab: 95, pron: 91, expr: "A" } },
+      { who: "in", cn: "好，那我加一下。你们主要服务哪些行业？", py: "Hǎo, nà wǒ jiā yíxià. Nǐmen zhǔyào fúwù nǎxiē hángyè?", tr: { en: "OK, I'll add you. Which industries do you mainly serve?", zh: "好，那我加一下。你们主要服务哪些行业？" } },
     ],
-    coach: { en: "Tip: offer your WeChat — “加个微信，我发您资料” is very natural here.", zh: "小提示：可以说“加个微信，我发您资料”，特别自然。" },
-    suggest: ["加个微信，我发您资料。", "这是我的名片。", "您贵姓？" ],
   },
   trip: {
     emoji: "🚕", role: { en: "Taxi driver", zh: "出租车司机" },
-    goal: { en: "State your destination, ask for the highway, get a receipt", zh: "说清目的地、要求走高速、索取发票" },
+    char: { aiName: { en: "Driver Li", zh: "李师傅" }, youName: { en: "Passenger", zh: "乘客" } },
+    brief: {
+      en: "Please role-play as the passenger. Tell Driver Li your destination, ask to take the highway, and remember to request a receipt at the end. Keep it polite.",
+      zh: "请扮演乘客。告诉李师傅你的目的地、要求走高速，并记得到了向他要发票。注意用语礼貌。",
+    },
     turns: [
       { who: "in", cn: "您好，去哪儿？", py: "Nín hǎo, qù nǎr?", tr: { en: "Hello, where to?", zh: "您好，去哪儿？" } },
-      { who: "out", cn: "去国贸大酒店，麻烦走高速。", py: "Qù Guómào Dàjiǔdiàn, máfan zǒu gāosù.", tr: { en: "To Guomao Hotel, please take the highway.", zh: "去国贸大酒店，麻烦走高速。" }, score: 96 },
+      { who: "out", cn: "去国贸大酒店，麻烦走高速。", py: "Qù Guómào Dàjiǔdiàn, máfan zǒu gāosù.", tr: { en: "To Guomao Hotel, please take the highway.", zh: "去国贸大酒店，麻烦走高速。" }, tag: "pron", eval: { word: "A", vocab: 96, pron: 96, expr: "A" } },
       { who: "in", cn: "好的，大概四十分钟。", py: "Hǎo de, dàgài sìshí fēnzhōng.", tr: { en: "Sure, about 40 minutes.", zh: "好的，大概四十分钟。" } },
+      { who: "out", cn: "好的，到了麻烦帮我开张发票。", py: "Hǎo de, dào le máfan bāng wǒ kāi zhāng fāpiào.", tr: { en: "OK, when we arrive please give me a receipt.", zh: "好的，到了麻烦帮我开张发票。" }, tag: "effort", eval: { word: "A", vocab: 93, pron: 92, expr: "A" } },
+      { who: "in", cn: "没问题，您扫码还是现金？", py: "Méi wèntí, nín sǎomǎ háishì xiànjīn?", tr: { en: "No problem. Will you pay by QR code or cash?", zh: "没问题，您扫码还是现金？" } },
     ],
-    coach: { en: "Tip: at the end say “帮我开张发票” to get a receipt for expenses.", zh: "小提示：到了说“帮我开张发票”，报销要用到。" },
-    suggest: ["帮我开张发票。", "大概多少钱？", "可以手机支付吗？"],
   },
 };
 function dialogueFor(s) {
@@ -124,6 +136,55 @@ function dialogueFor(s) {
    ============================================================ */
 function lumiHead(size = 56) {
   return `<div class="assistant-avatar" style="width:${size}px;height:${size}px">${lumiSVG("happy")}</div>`;
+}
+
+/* flat-illustration "digital human" (role-play AI character; placeholder
+   for a real-time digital-human video/avatar in production) */
+function digitalHuman() {
+  return `
+<svg viewBox="0 0 240 270" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="digital human">
+  <defs>
+    <linearGradient id="dhHair" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a2f52"/><stop offset="1" stop-color="#221a36"/></linearGradient>
+    <linearGradient id="dhBlazer" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#41527a"/><stop offset="1" stop-color="#2b3452"/></linearGradient>
+    <linearGradient id="dhSkin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe0c8"/><stop offset="1" stop-color="#f6c6a8"/></linearGradient>
+  </defs>
+  <path d="M34 270 C34 206 68 186 120 186 C172 186 206 206 206 270 Z" fill="url(#dhBlazer)"/>
+  <path d="M100 190 L120 226 L140 190 L132 184 H108 Z" fill="#f4f1fb"/>
+  <path d="M101 190 L120 220 L112 190 Z" fill="#333f5e"/>
+  <path d="M139 190 L120 220 L128 190 Z" fill="#333f5e"/>
+  <path d="M108 166 h24 v22 c0 10 -24 10 -24 0 z" fill="url(#dhSkin)"/>
+  <path d="M68 122 C68 70 98 46 120 46 C142 46 172 70 172 122 C172 160 160 182 152 192 C152 150 150 120 120 118 C90 120 88 150 88 192 C80 182 68 160 68 122 Z" fill="url(#dhHair)"/>
+  <ellipse cx="120" cy="120" rx="42" ry="49" fill="url(#dhSkin)"/>
+  <path d="M76 110 C80 74 100 56 120 56 C140 56 160 74 164 110 C151 92 138 86 120 86 C102 86 89 92 76 110 Z" fill="url(#dhHair)"/>
+  <path d="M96 106 q9 -5 17 0" stroke="#3a3050" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+  <path d="M127 106 q9 -5 17 0" stroke="#3a3050" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+  <ellipse cx="104" cy="119" rx="5" ry="6.5" fill="#2a2340"/>
+  <ellipse cx="136" cy="119" rx="5" ry="6.5" fill="#2a2340"/>
+  <circle cx="105.6" cy="116.4" r="1.7" fill="#fff"/>
+  <circle cx="137.6" cy="116.4" r="1.7" fill="#fff"/>
+  <path d="M120 124 v9 q-3 3 -6 3" stroke="#e2a686" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+  <path d="M109 145 q11 9 22 0" stroke="#c25b52" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+  <ellipse cx="97" cy="135" rx="7" ry="4" fill="#ff9e8f" opacity=".4"/>
+  <ellipse cx="143" cy="135" rx="7" ry="4" fill="#ff9e8f" opacity=".4"/>
+  <circle cx="162" cy="130" r="4.6" fill="#6D5EF8"/>
+  <path d="M162 135 q6 6 1 15" stroke="#6D5EF8" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+</svg>`;
+}
+
+/* resolve title / character / brief for the selected scenario */
+function sceneMeta(s) {
+  const dia = dialogueFor(s);
+  const scn = scnByKey(s.scenario);
+  return {
+    dia, scn,
+    title: tt(scn.t, s.lang),
+    cn: scn.cn,
+    aiName: tt(dia.char.aiName, s.lang),
+    youName: tt(dia.char.youName, s.lang),
+    brief: tt(dia.brief, s.lang),
+    role: tt(dia.role, s.lang),
+    emoji: dia.emoji,
+  };
 }
 function tabbar(active, d) {
   // AI/LUMI is the first, always-accented tab so the assistant stays prominent
@@ -317,7 +378,7 @@ function scrRecommend(s) {
 
       <div class="scn-list" style="margin-top:8px">
         ${list.map((o) => `
-        <div class="scn-card scn-card--${o.c}" data-scenario="${o.k}" data-go="chat">
+        <div class="scn-card scn-card--${o.c}" data-scenario="${o.k}" data-go="scene_intro">
           <div class="scn-card__top">
             <span class="scn-card__emoji">${o.e}</span>
             <div><h3>${scnLabel(o, s.lang)}</h3>
@@ -340,63 +401,105 @@ function scrRecommend(s) {
 }
 
 /* ============================================================
-   6 · CHAT — scenario conversation
+   6 · SCENE INTRO — role-play background page before a conversation
    ============================================================ */
-function scrChat(s) {
+function scrSceneIntro(s) {
   const d = L(s);
-  const dia = dialogueFor(s);
-  const scn = scnByKey(s.scenario);
-  const turns = dia.turns.map((m) => {
-    if (m.who === "in") {
-      return `
-      <div class="msg msg--in">
-        <div class="msg__avatar">${lumiSVG("happy")}</div>
-        <div class="bubble-chat">
-          <div class="pinyin">${m.py}</div>${m.cn}
-          <div class="trans">${tt(m.tr, s.lang)}</div>
-        </div>
-      </div>`;
-    }
-    return `
-      <div class="msg msg--out">
-        <div class="bubble-chat">
-          <div class="pinyin">${m.py}</div>${m.cn}
-          <div class="trans">${tt(m.tr, s.lang)}</div>
-          ${m.score ? `<div class="msg__score">${ICON.star} ${d.sumPron} ${m.score}</div>` : ""}
-        </div>
-      </div>`;
-  }).join("");
-
+  const m = sceneMeta(s);
   return `
-  <section class="screen chat screen--light">
+  <section class="screen scene-intro screen--light">
     ${statusbar("light")}
-    <div class="chat__nav">
-      <button class="iconbtn" data-go="recommend">${ICON.back}</button>
-      <div class="chat__title"><b>${tt(scn.t, s.lang)}</b><br><span>${d.chatRole} · ${scn.cn}</span></div>
-      <span class="chat__role-tag">${dia.emoji} ${tt(dia.role, s.lang)}</span>
+    <div class="scene-intro__banner">
+      <div class="scene-intro__scene"></div>
+      <div class="scene-intro__dh">${digitalHuman()}</div>
+      <button class="scene-intro__close" data-go="recommend" aria-label="close">✕</button>
     </div>
+    <div class="screen__body">
+      <h2 class="scene-intro__title">${m.title}</h2>
+      <p class="scene-intro__desc">${m.brief}</p>
 
-    <div class="chat__body">
-      <div class="coach">🎯 <b>${d.chatGoal}</b>: ${tt(dia.goal, s.lang)}</div>
-      ${turns}
-      <div class="coach">💡 <b>${d.coachName}</b>: ${tt(dia.coach, s.lang)}</div>
+      <div class="sec-title" style="margin-top:6px"><b>${d.sceneChars}</b></div>
+      <div class="char-cards">
+        <div class="char-card">
+          <div class="char-card__ava char-card__ava--ai">${digitalHuman()}</div>
+          <span class="char-card__role">${d.sceneAi}</span>
+          <b>${m.aiName}</b>
+        </div>
+        <div class="char-card">
+          <div class="char-card__ava char-card__ava--you">🧑‍💼</div>
+          <span class="char-card__role">${d.sceneYou}</span>
+          <b>${m.youName}</b>
+        </div>
+      </div>
     </div>
-
-    <div class="chat__foot">
-      <div class="suggest">
-        ${dia.suggest.map((x) => `<button data-suggest>${x}</button>`).join("")}
-      </div>
-      <div class="chat__inputbar">
-        <div class="field">${d.chatField}</div>
-        <div class="mic" data-go="summary">${ICON.mic}</div>
-      </div>
+    <div class="screen__footer">
+      <button class="btn" data-go="chat">${d.sceneStart}</button>
     </div>
   </section>`;
 }
 
 /* ============================================================
-   7 · SUMMARY
+   7 · CHAT — scenario conversation (digital human + office scene)
    ============================================================ */
+function scrChat(s) {
+  const d = L(s);
+  const m = sceneMeta(s);
+  const turns = m.dia.turns.map((mm) => {
+    if (mm.who === "in") {
+      return `
+      <div class="dh-msg dh-msg--ai">
+        <div class="dh-bubble">
+          <span class="dh-cn">${mm.cn}</span>
+          <div class="dh-trans" hidden><span class="pinyin">${mm.py}</span>${tt(mm.tr, s.lang)}</div>
+        </div>
+        <div class="dh-actions">
+          <button data-xlate>🌐 ${d.actTranslate}</button>
+          <button>🐢 ${d.actSlow}</button>
+          <button>💡 ${d.actHint}</button>
+        </div>
+      </div>`;
+    }
+    const ev = mm.eval;
+    return `
+      <div class="dh-msg dh-msg--me">
+        <div class="dh-bubble dh-bubble--me">${mm.cn}</div>
+        ${ev ? `
+        <div class="dh-eval">
+          <span class="dh-eval__tag">✓ ${d.evalTags[mm.tag] || ""}</span>
+          <div class="dh-eval__dims">
+            <span>${d.evalDims.wording} ${ev.word}</span>
+            <span>${d.evalDims.vocab} ${ev.vocab}</span>
+            <span>${d.evalDims.pron} ${ev.pron}</span>
+            <span>${d.evalDims.expr} ${ev.expr}</span>
+          </div>
+        </div>` : ""}
+      </div>`;
+  }).join("");
+
+  return `
+  <section class="screen scene-chat">
+    <div class="scene-chat__bg"></div>
+    <div class="scene-chat__human">${digitalHuman()}</div>
+    ${statusbar("light")}
+    <div class="scene-chat__nav">
+      <button class="dh-close" data-go="home" aria-label="close">✕</button>
+      <div class="scene-chat__title">
+        <b>${m.title}</b>
+        <span>${m.emoji} ${m.role} · ${m.cn}</span>
+      </div>
+      <button class="dh-finish" data-go="home">${d.finish}</button>
+    </div>
+    <div class="scene-chat__msgs">${turns}</div>
+    <div class="scene-chat__foot">
+      <div class="dh-inputbar">
+        <div class="field">${d.dhInput}</div>
+        <div class="mic">${ICON.mic}</div>
+      </div>
+    </div>
+  </section>`;
+}
+
+/* (legacy summary screen — retained but unused; scenario has no report now) */
 function scrSummary(s) {
   const d = L(s);
   const scn = scnByKey(s.scenario);
@@ -478,7 +581,7 @@ function scrHome(s) {
       <!-- quick-start tiles -->
       <div class="quick-card">
         ${QUICK.map((q) => `
-        <button class="quick-tile" data-scenario="${q.k}" data-go="chat">
+        <button class="quick-tile" data-scenario="${q.k}" data-go="scene_intro">
           <b>${tt(q.t, s.lang)}</b>
           <span class="quick-tile__ic">${q.e}<span class="quick-tile__spark">✦</span></span>
         </button>`).join("")}
@@ -488,7 +591,7 @@ function scrHome(s) {
       <div class="sec-title" style="margin-top:20px"><b>${d.popTitle}</b></div>
       <div class="pop-grid">
         ${POPULAR.map((p) => `
-        <div class="pop-card" data-scenario="${p.k}" data-go="chat">
+        <div class="pop-card" data-scenario="${p.k}" data-go="scene_intro">
           <div class="pop-thumb pop-thumb--g${p.g}"><span>${p.e}</span></div>
           <b>${tt(p.t, s.lang)}</b>
           <span class="learners"><i class="learn-dot"></i>${d.learners(p.learners)}</span>
@@ -514,12 +617,13 @@ function practiceCards(s) {
   const d = L(s);
   const ind = d.industries.find((x) => x.k === s.industry) || d.industries[d.industries.length - 1];
   const genPool = [SCN.work[0], SCN.growth[1], SCN.growth[3], SCN.work[1]];
-  const gen = shuffled(genPool).slice(0, 2).map((o) => ({ k: o.k, e: o.e, title: tt(o.t, s.lang), badge: d.pcGeneral, kind: "gen" }));
+  const gen = shuffled(genPool).map((o) => ({ k: o.k, e: o.e, title: tt(o.t, s.lang), badge: d.pcGeneral, kind: "gen" }));
   const indCards = [
     { k: "visit", e: "🤝", title: `${ind.t} · ${d.pcVisit}`, badge: ind.t, kind: "ind" },
     { k: "expo", e: "📊", title: `${ind.t} · ${d.pcPitch}`, badge: ind.t, kind: "ind" },
   ];
-  return [...gen, ...indCards];
+  // 3 fresh picks each time: at least one industry-specific + general mix
+  return shuffled([...gen, ...indCards]).slice(0, 3);
 }
 
 /* shared assistant chat body (reused by full screen + pull-down sheet) */
@@ -538,9 +642,10 @@ function assistantInner(s, inSheet) {
     </div>`;
 
   if (mode === "menu") {
-    body += `<div class="asst-prompts">${d.asstPrompts
-      .map((p) => `<button class="asst-prompt" data-asst="${p.k}">${p.t}</button>`)
-      .join("")}</div>`;
+    body += `<div class="asst-prompts">
+      <button class="asst-prompt asst-prompt--continue" data-go="chat">🔁 ${d.asstContinue}</button>
+      ${d.asstPrompts.map((p) => `<button class="asst-prompt" data-asst="${p.k}">${p.t}</button>`).join("")}
+    </div>`;
   } else {
     const chosen = d.asstPrompts.find((p) => p.k === mode);
     body += `<div class="msg msg--out"><div class="bubble-chat">${chosen ? chosen.say : ""}</div></div>`;
@@ -549,11 +654,15 @@ function assistantInner(s, inSheet) {
       body += `<div class="msg msg--in"><div class="msg__avatar">${lumiSVG("happy")}</div><div class="bubble-chat">${d.asstPracticeReply}</div></div>`;
       body += `<div class="asst-scn-list">${practiceCards(s)
         .map((c) => `
-        <button class="asst-scn" data-scenario="${c.k}" data-go="chat">
+        <button class="asst-scn" data-scenario="${c.k}" data-go="scene_intro">
           <span class="asst-scn__e">${c.e}</span>
           <span class="asst-scn__tx"><b>${c.title}</b><span class="asst-scn__badge asst-scn__badge--${c.kind}">${c.badge}</span></span>
           ${ICON.chev}
         </button>`).join("")}</div>`;
+      body += `<div class="asst-practice-more">
+        <button class="pill-btn pill-btn--light" data-asst="practice">🎲 ${d.recShuffle}</button>
+        <span class="asst-practice-hint">${d.practiceHint}</span>
+      </div>`;
     } else if (mode === "translate") {
       body += `<div class="msg msg--in"><div class="msg__avatar">${lumiSVG("happy")}</div><div class="bubble-chat">${d.asstTranslateReply}</div></div>`;
       body += `<div class="trans-card">
@@ -627,7 +736,7 @@ function scrCourse(s) {
       </div>
     </div>
     <div class="screen__footer">
-      <button class="btn" data-go="chat">${d.courseCta}</button>
+      <button class="btn" data-go="scene_intro">${d.courseCta}</button>
     </div>
   </section>`;
 }
@@ -659,7 +768,7 @@ function scrLibrary(s) {
       <div class="sec-title"><b>${d.libForYou}</b><a data-go="library">${d.libSwap}</a></div>
       <div class="scn-list">
         ${hot.map((o) => `
-        <div class="scn-card scn-card--${o.c}" data-scenario="${o.k}" data-go="chat">
+        <div class="scn-card scn-card--${o.c}" data-scenario="${o.k}" data-go="scene_intro">
           <div class="scn-card__top">
             <span class="scn-card__emoji">${o.e}</span>
             <div><h3>${scnLabel(o, s.lang)}</h3><div class="scn-card__sub">${tt(o.s, s.lang)}</div></div>
@@ -730,6 +839,8 @@ const SCREENS = [
   { id: "ask_purpose", group: "首次进入 · Onboarding", title: "聊天 · 学习目的", desc: "在华工作 / 对接客户供应商 / 进入市场 / 个人发展。", render: scrAskPurpose },
   { id: "ask_industry",group: "首次进入 · Onboarding", title: "聊天 · 所在行业", desc: "新能源汽车 / 光伏 / 通信 / 跨境电商 / 互联网 …… 共 11 个行业。", render: scrAskIndustry },
   { id: "recommend",   group: "首次进入 · Onboarding", title: "可直接开始的场景", desc: "按目的随机推可直接开练的场景，底部上划查看更多。", render: scrRecommend },
+  { id: "scene_intro", group: "核心体验 · Practice", title: "场景介绍页", desc: "进入对话前的背景介绍 + 对话角色（AI 角色 & 你）+ 开始对话。", render: scrSceneIntro },
+  { id: "chat",        group: "核心体验 · Practice", title: "场景对话（数字人）", desc: "数字人 + 办公室场景；AI 可翻译/慢速/提示；用户发言后给简短多维评价；可随时结束、下次继续。", render: scrChat },
   { id: "home",        group: "主应用 · App", title: "传统首页 · LUMI 随时召唤", desc: "上划进入的首页：顶部大召唤条 + 悬浮按钮 + 底部首位 Tab，LUMI 全程突出、随时唤起。", render: scrHome },
   { id: "assistant",   group: "主应用 · App", title: "召唤 LUMI · 选项", desc: "唤起 AI：练场景 / 翻译一句话 / 今天学点什么 + 自由输入。", render: scrAssistant },
   { id: "asst_practice", group: "主应用 · App", title: "唤起 AI · 练场景", desc: "随机给出通用 + 行业相关场景卡片，点卡片直接开聊。", render: (s) => assistantScreen({ ...s, asstMode: "practice" }) },

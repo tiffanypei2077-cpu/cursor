@@ -17,13 +17,13 @@
 | F-05 | Onboarding | 选学习目的 | P0 | `ask_purpose` |
 | F-06 | Onboarding | 选所在行业 | P0 | `ask_industry` |
 | F-07 | Onboarding | 推荐可直接开始的场景 + 换一批 + 上划进首页 | P0 | `recommend` |
-| ~~F-08~~ | 练习 | ~~场景对话~~ **本版本移除，后续单独设计** | 暂缓 | — |
-| ~~F-09~~ | 练习 | ~~通关结算~~ **本版本移除，后续单独设计** | 暂缓 | — |
+| F-08 | 练习 | 场景介绍页（背景 + 角色扮演任务 + 对话角色） | P0 | `scene_intro` |
+| F-09 | 练习 | 场景对话（数字人 + 办公室；AI 翻译/慢速/提示；用户发言后多维评价；无报告、可续聊） | P0 | `chat` |
 | F-10 | 首页 | 传统首页结构（焦点/快速磁贴/行业热门场景） | P0 | `home` |
 | F-11 | 首页 | 下拉手势召唤 LUMI | P0 | `home` |
 | F-12 | 首页 | 中部召唤条 + 底部 LUMI Tab | P0 | `home` |
 | F-13 | 助手 | 召唤 LUMI：今天想做点什么（含自由文本/语音） | P0 | `assistant` |
-| F-14 | 助手 | 练一个场景（通用 + 行业相关卡片） | P0 | `asst_practice` |
+| F-14 | 助手 | 练一个新场景（3 个新卡片：通用 + 行业相关 + 换一批/指令） | P0 | `asst_practice` |
 | F-15 | 助手 | 翻译一句话 | P0 | `asst_translate` |
 | F-16 | 助手 | 今天学点什么 + 跳转课程链接 | P0 | `asst_learn` |
 | F-17 | 课程 | 课程页（占位） | P1 | `course` |
@@ -71,12 +71,25 @@
 **验收标准**
 - Given 进入推荐页，Then 按“学习目的”**随机展示 3 个**可立即开始的场景卡（标题/中文名/说明/标签/▶开始）。
 - When 点击“🎲 换一批”，Then 重新随机推荐。
-- When 点击场景卡，Then（原应进入场景对话）**本版本暂不跳转**（场景对话已移除）。
+- When 点击场景卡，Then 进入**场景介绍页**（`scene_intro`）。
 - And 底部展示“上划查看更多场景”手势入口；When 触发，Then 进入传统首页。
 
-### F-08 / F-09 场景对话与通关结算 · 🚧 本版本移除
-> 已从本版本移除，作为独立模块后续单独设计。原设想（保留备查）：AI 角色扮演对话（拼音 + 中文 + 界面语言译文 + 发音评分 + LUMI 实时提示 + 建议回复 + 文本/语音输入）→ 通关结算（评分 / 解锁表达 / 下一步建议）。
-> 影响：现有指向“开始对话”的入口（推荐场景卡、首页磁贴/热门卡、练一个场景卡片、课程 CTA 等）暂作占位，不触发跳转。
+### F-08 场景介绍页（`scene_intro`）· P0
+**用户故事**：作为学习者，开始对话前我希望先了解场景背景和我要扮演的角色。
+**验收标准**
+- Then 展示：办公室场景 banner + 数字人预览 + 关闭按钮；场景标题；角色扮演任务说明。
+- Then “对话角色”区展示 AI 角色（有人物名）+ You（我的角色）。
+- When 点击“开始对话”，Then 进入 `chat`。
+
+### F-09 场景对话（`chat`）· P0
+**用户故事**：作为学习者，我希望像和真人一样、在有画面的场景里练习，并得到简短、多维的反馈；可随时结束、下次接着聊。
+**验收标准**
+- Then 背景为**数字人 + 办公室场景**（占位，可替换为实时数字人）。
+- Then 顶部展示：关闭（X）、**场景名称 + AI 角色**、**结束（Finish）**。
+- Then AI 消息含中文，并提供 **翻译 / 慢速 / 提示** 三个操作；When 点“翻译”，Then 就地展开拼音 + 界面语言译文。
+- Then 用户发言后展示**简短多维评价**：用语 / 词汇准确度 / 发音准确度 / 表达准确度 + 总评标签。
+- Then 底部为“输入消息，或按住说话”+ 语音。
+- **无通关报告**；When 点“结束”，Then 退出；**再次进入同一场景继续上次对话**。
 
 ### F-10 传统首页结构（`home`）· P0
 **验收标准**
@@ -103,15 +116,17 @@
 ### F-13 召唤 LUMI · 今天想做点什么（`assistant`）· P0
 **用户故事**：唤起 AI 后我希望快速选择要做的事，或直接打字/说话。
 **验收标准**
-- Then LUMI 问“今天想做点什么？”，提供 3 个选项：练一个场景 / 翻译一句话 / 今天学点什么。
+- Then LUMI 问“今天想做点什么？”，提供 4 个选项（置顶为**继续上次的对话**）：继续上次的对话 / 练一个新场景 / 翻译一句话 / 今天学点什么。
 - Then 下方常驻文本输入框 + 语音按钮，用户可自由输入。
-- When 选择某选项，Then 在同一对话中进入对应模式（见 F-14/15/16）。
-- And 进入模式后提供 3 个快捷指令切换条，可在三种模式间切换。
+- When 点击“继续上次的对话”，Then 直接进入 `chat` 继续上次场景。
+- When 选择其余选项，Then 在同一对话中进入对应模式（见 F-14/15/16）。
+- And 进入模式后提供快捷指令切换条，可在几种模式间切换。
 
-### F-14 练一个场景（`asst_practice`）· P0
+### F-14 练一个新场景（`asst_practice`）· P0
 **验收标准**
-- When 选择“练一个场景”，Then LUMI 回复并在对话内给出场景卡片：**通用场景 + 用户所在行业相关场景**（行业卡带行业标签）。
-- When 点击任意场景卡，Then（原应进入场景对话）**本版本暂不跳转**（场景对话已移除）。
+- When 选择“练一个新场景”，Then LUMI 回复并给出 **3 个新场景卡片**：**通用场景 + 用户所在行业相关场景**（行业卡带行业标签）。
+- When 点击“🎲 换一批”，Then 重新随机 3 个；用户也可在输入框给明确指令更换。
+- When 点击任意场景卡，Then 进入**场景介绍页**（`scene_intro`）。
 
 ### F-15 翻译一句话（`asst_translate`）· P0
 **验收标准**
@@ -131,7 +146,7 @@
 ### F-18 场景库（`library`）· P1
 **验收标准**
 - Then 展示搜索框、场景分类、为你推荐（可换一批）。
-- When 点击场景，Then（原应进入对话）**本版本暂不跳转**（场景对话已移除）。
+- When 点击场景，Then 进入**场景介绍页**（`scene_intro`）。
 
 ### F-19 我的（`profile`）· P1
 **验收标准**
@@ -171,9 +186,12 @@
 | `lumi_summon` | 唤起助手 | entry(pulldown/hero/tab) |
 | `assistant_action` | 选择助手选项 | mode(practice/translate/learn) |
 | `assistant_free_input` | 自由输入/语音（产品化） | type(text/voice) |
-| `scenario_start` 🚧 | 进入对话（场景对话移除后暂缓） | scenario_id, source(onboarding/home/library/assistant) |
-| `chat_turn` 🚧 | 每轮对话（暂缓） | scenario_id, turn_index, score |
-| `scenario_complete` 🚧 | 通关结算（暂缓） | scenario_id, pron, manner, xp, duration |
+| `scene_intro_view` | 进入场景介绍页 | scenario_id, source(onboarding/home/library/assistant) |
+| `scenario_start` | 点击“开始对话”进入 chat | scenario_id |
+| `scenario_continue` | 继续上次的对话 | scenario_id |
+| `chat_turn` | 每轮对话（用户发言） | scenario_id, turn_index, eval(word/vocab/pron/expr) |
+| `chat_action` | 点翻译/慢速/提示 | scenario_id, action |
+| `scenario_finish` | 点“结束”离开（无报告） | scenario_id, turns |
 | `course_link_click` | 点击课程链接 | course_id |
 | `course_view` | 进入课程页 | course_id |
 

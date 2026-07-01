@@ -1,0 +1,76 @@
+/* ============================================================
+   BizChinese · 商务汉语 — Design Tokens
+   A "fancy AI" design language: deep gradients, glassmorphism,
+   warm Chinese gold accents + modern indigo/violet AI hues.
+   ============================================================ */
+
+:root {
+  /* ---- Brand gradient (AI / immersive) ---- */
+  --grad-ai: linear-gradient(135deg, #6D5EF8 0%, #9A4FF0 45%, #FF6FB5 100%);
+  --grad-ai-soft: linear-gradient(135deg, #7C6CFF 0%, #B45CF6 100%);
+  --grad-gold: linear-gradient(135deg, #FFD479 0%, #FF9F45 100%);
+  --grad-teal: linear-gradient(135deg, #34E0C4 0%, #19A7CE 100%);
+  --grad-coral: linear-gradient(135deg, #FF8FA3 0%, #FF5C7A 100%);
+
+  /* ---- Core palette ---- */
+  --indigo: #6D5EF8;
+  --violet: #9A4FF0;
+  --pink: #FF6FB5;
+  --gold: #FFB951;
+  --teal: #19C7B3;
+  --coral: #FF5C7A;
+
+  /* ---- Surfaces (dark immersive) ---- */
+  --bg-deep: #0C0A1C;
+  --bg-deep-2: #15112E;
+  --glass: rgba(255, 255, 255, 0.08);
+  --glass-strong: rgba(255, 255, 255, 0.14);
+  --glass-border: rgba(255, 255, 255, 0.16);
+
+  /* ---- Surfaces (light content) ---- */
+  --paper: #F6F5FF;
+  --paper-2: #FFFFFF;
+  --ink: #1A1733;
+  --ink-2: #5A5675;
+  --ink-3: #908CB0;
+  --line: #ECE9FB;
+
+  /* ---- Text on dark ---- */
+  --on-dark: #FFFFFF;
+  --on-dark-2: rgba(255, 255, 255, 0.72);
+  --on-dark-3: rgba(255, 255, 255, 0.5);
+
+  /* ---- Status ---- */
+  --success: #2ED59A;
+  --warning: #FFB020;
+
+  /* ---- Shape ---- */
+  --r-sm: 12px;
+  --r-md: 18px;
+  --r-lg: 26px;
+  --r-xl: 34px;
+  --r-pill: 999px;
+
+  /* ---- Shadow ---- */
+  --shadow-sm: 0 6px 18px rgba(20, 12, 50, 0.12);
+  --shadow-md: 0 14px 40px rgba(28, 14, 70, 0.22);
+  --shadow-glow: 0 18px 60px rgba(120, 80, 255, 0.45);
+
+  /* ---- Type ---- */
+  --font: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}

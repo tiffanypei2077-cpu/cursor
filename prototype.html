@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BizChinese · 交互原型</title>
+  <link rel="stylesheet" href="assets/css/tokens.css" />
+  <link rel="stylesheet" href="assets/css/app.css" />
+  <link rel="stylesheet" href="assets/css/gallery.css" />
+</head>
+<body class="page">
+  <div class="proto">
+    <div class="proto__bar">
+      <a href="index.html">← 全部原型图</a>
+      <button id="restart">↻ 重新体验</button>
+      <select id="jump" aria-label="跳转到任意界面"></select>
+    </div>
+    <div class="proto__crumb" id="crumb"></div>
+
+    <div class="phone">
+      <div class="phone__notch"></div>
+      <div class="phone__screen" id="screen"></div>
+    </div>
+
+    <p class="proto__hint">可点击的交互原型：和 LUMI 聊天、输入名字、选语言/目的、点场景卡片即可按真实路径流转；推荐页底部可「上划」进入传统首页。也可用上方下拉框跳到任意界面。</p>
+  </div>
+
+  <script src="assets/js/avatars.js"></script>
+  <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/screens.js"></script>
+  <script src="assets/js/flow.js"></script>
+</body>
+</html>
